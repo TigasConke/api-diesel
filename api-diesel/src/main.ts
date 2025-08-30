@@ -6,6 +6,9 @@ import { RolesGuard } from './auth/guards/roles.guard'
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
 
+  // Habilita o CORS para aceitar requisições do frontend
+  app.enableCors();
+
   // Validation pipe
   app.useGlobalPipes(new ValidationPipe({
     transform: true,
