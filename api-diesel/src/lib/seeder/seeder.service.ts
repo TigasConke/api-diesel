@@ -1,19 +1,21 @@
-import { faker } from '@faker-js/faker/locale/pt_BR';
-import { Injectable } from '@nestjs/common';
-import { hash } from 'argon2';
-import { Cargo, Status, type Usuario } from 'src/database/entities/usuario/usuario.entity';
-import { UsuarioService } from 'src/resource/usuario/usuario.service';
+import { faker } from '@faker-js/faker/locale/pt_BR'
+import { Injectable } from '@nestjs/common'
+import { hash } from 'argon2'
+import { Cargo, Status, type Usuario } from 'src/database/entities/usuario/usuario.entity'
+import { UsuarioService } from 'src/resource/usuario/usuario.service'
 
 @Injectable()
 export class DatabaseSeederService {
-  constructor(private readonly usuarioService: UsuarioService) {}
+  constructor(
+    private readonly usuarioService: UsuarioService,
+  ) {}
 
   async seed() {
     // * Gera 5 funcionários, 3 ativos e 2 inativos
     const funcionarios = await Promise.all(
       Array.from({ length: 5 }).map(async (_, index) => {
-        const firstName = faker.person.firstName();
-        const lastName = faker.person.lastName();
+        const firstName = faker.person.firstName()
+        const lastName = faker.person.lastName()
 
         const funcionario: Partial<Usuario> = {
           cargo: Cargo.COLABORADOR,
@@ -24,16 +26,16 @@ export class DatabaseSeederService {
           status: index > 2 ? Status.INATIVO : Status.ATIVO,
           cpf: String(faker.number.int({ min: 10000000000, max: 99999999999 })),
           data_nascimento: faker.date.birthdate(),
-        };
+        }
 
-        return funcionario;
+        return funcionario
       }),
-    );
+    )
 
     // * Gera 1 administrador ativo
     const administrador = await (async () => {
-      const firstName = faker.person.firstName();
-      const lastName = faker.person.lastName();
+      const firstName = faker.person.firstName()
+      const lastName = faker.person.lastName()
 
       const funcionario: Partial<Usuario> = {
         cargo: Cargo.ADMINISTRADOR,
@@ -44,15 +46,11 @@ export class DatabaseSeederService {
         status: Status.ATIVO,
         cpf: String(faker.number.int({ min: 10000000000, max: 99999999999 })),
         data_nascimento: faker.date.birthdate(),
-      };
+      }
 
-      return funcionario;
-    })();
+      return funcionario
+    })()
 
-    await this.usuarioService.insert(funcionarios.concat(administrador));
-    
-    // Logs para te ajudar a ver o e-mail
-    console.log('Banco de dados populado com usuários de teste!');
-    console.log('E-mail do administrador:', administrador.email);
+    await this.usuarioService.insert(funcionarios.concat(administrador))
   }
 }
