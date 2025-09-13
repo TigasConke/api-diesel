@@ -26,4 +26,16 @@ export class Produto extends ProdutoRelations {
     nullable: true,
   })
   tamanho_tanque?: number
+
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    unsigned: true,
+    transformer: {
+      to: (value: number) => value,
+      from: (value: string | null) => (value !== null ? Number(value) : null),
+    },
+  })
+  valor: number
 }

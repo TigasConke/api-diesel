@@ -1,15 +1,7 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm'
 import { OrdemServicoRelations } from './ordem-servico.relations'
 
-enum MetodoPagamento {
-  AVISTA = 'avista',
-}
-
-enum PrazoPagamento {
-  '10d' = '10 dias',
-}
-
-enum Status {
+export enum Status {
   ANDAMENTO = 'Em andamento',
   CONCLUIDA = 'Concluida',
 }
@@ -25,20 +17,11 @@ export class OrdemServico extends OrdemServicoRelations {
   @CreateDateColumn()
   created_at: Date
 
-  @Column({ type: 'text' })
-  descricao: string
-
   @Column({
-    type: 'enum',
-    enum: MetodoPagamento,
+    type: 'text',
+    nullable: true,
   })
-  metodo_pagamento: MetodoPagamento
-
-  @Column({
-    type: 'enum',
-    enum: PrazoPagamento,
-  })
-  prazo_pagamento: PrazoPagamento
+  descricao: string | null
 
   @Column({
     type: 'enum',
@@ -51,7 +34,4 @@ export class OrdemServico extends OrdemServicoRelations {
 
   @Column({ unsigned: true })
   valor_mo: number
-
-  @Column({ unsigned: true })
-  valor_produtos: number
 }

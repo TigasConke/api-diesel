@@ -1,6 +1,6 @@
 import { IsPositive } from 'class-validator'
 
-export class DeleteClienteDto {
+export class DeleteOrdemServicoDto {
   @IsPositive({
     message: 'O ID informado é inválido',
   })
