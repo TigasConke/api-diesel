@@ -1,5 +1,7 @@
 import { IsEmail, IsEnum, IsISO8601, Length, MaxDate, MinDate } from 'class-validator'
 import { addYears, subYears } from 'date-fns'
+import { IsDate } from 'class-validator'
+import { Type } from 'class-transformer'
 import { Cargo, Status } from 'src/database/entities/usuario/usuario.entity'
 
 export class CreateUserDto {
@@ -26,18 +28,10 @@ export class CreateUserDto {
   })
   rg: string
 
-  @IsISO8601(
-    {},
-    {
-      message: 'A data de nascimento informada é inválida',
-    },
-  )
-  @MinDate(subYears(new Date(), 18), {
-    message: 'O funcionário deve ter pelo menos 18 anos',
-  })
-  @MaxDate(addYears(new Date(), 100), {
-    message: 'O funcionário deve ter no máximo 100 anos',
-  })
+  @Type(() => Date)
+  @IsDate({ message: 'Data de nascimento inválida' })
+  @MinDate(subYears(new Date(), 100), { message: 'O funcionário deve ter no máximo 100 anos' })
+  @MaxDate(subYears(new Date(), 18), { message: 'O funcionário deve ter pelo menos 18 anos' })
   data_nascimento: Date
 
   @Length(11, 11, {
