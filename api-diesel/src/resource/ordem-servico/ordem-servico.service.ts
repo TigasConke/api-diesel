@@ -33,4 +33,10 @@ export class OrdemServicoService {
 
     return deletedOrdemServico
   }
+
+  async findAll(): Promise<OrdemServico[]> {
+    return this.ordemServicoRepository.find({
+      relations: ['cliente', 'servico', 'responsavel'],
+    })
+  }
 }
